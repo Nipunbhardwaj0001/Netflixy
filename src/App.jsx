@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import './App.css'
+
+import Body from './components/Body'
+import { Provider } from 'react-redux'
+import appStore from './utils/appStore'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className='font-bold text-4xl text-blue-600'>
-      hello world, lets build netflixy
-    </div>
+    <Provider store={appStore}><Body/></Provider>
   )
 }
 
