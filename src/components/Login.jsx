@@ -4,6 +4,7 @@ import { checkValidData } from "../utils/validate";
 import {auth} from "../utils/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword,updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { BGIMG } from "../utils/constants";
 
 
 const Login = () => {
@@ -28,10 +29,7 @@ const Login = () => {
                 displayName: name.current.value, photoURL: "https://example.com/jane-q-user/profile.jpg"
                 }).then(() => {
                 // Profile updated!
-                navigate("/browse");
-                // ...
                 }).catch((error) => {
-                // An error occurred
                 setErrorMessage(error.message);
                 // ...
                 });
@@ -50,9 +48,6 @@ const Login = () => {
             .then((userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
-                console.log(user);
-                navigate("/browse");
-                // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -68,8 +63,8 @@ const Login = () => {
         <div>
             <Header showProfile={false}/>
             <div className="absolute inset-0">
-                <img src="https://assets.nflxext.com/ffe/siteui/vlv3/f6e7f6df-6973-46ef-b98f-12560d2b3c69/web/IN-en-20250317-TRIFECTA-perspective_26f87873-6014-460d-a6fb-1d96d85ffe5f_large.jpg" 
-                alt='Logo' className="w-full h-full object-cover"/>
+                <img src={BGIMG} 
+                alt='backImg' className="w-full h-full object-cover"/>
             </div>
             <form onSubmit={(e) => e.preventDefault() } className="w-3/12 absolute p-12 my-36 mx-auto right-0 left-0 text-white rounded-lg bg-black/80">
                 <h1 className="font-bold text-3xl py-4">{isSignInForm ? "Sign in" : "Sign Up"}</h1>
