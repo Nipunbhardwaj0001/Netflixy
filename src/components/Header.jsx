@@ -4,11 +4,15 @@ import {auth} from "../utils/firebase"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { addUser,removeUser } from "../utils/userSlice";
-import { LOGO, UICON } from "../utils/constants";
+import { LOGO, SUPPORTED_LANG, UICON } from "../utils/constants";
+import { toggleGptSearchView } from "../utils/GptSlice";
+import lang from "../utils/langConstants";
+import { changeLanguage } from "../utils/configSlice";
 const Header = ({ showProfile = true }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch)
   const handleSignOut = () => {
     signOut(auth).then(() => {
     }).catch((error) => {
@@ -30,14 +34,27 @@ const Header = ({ showProfile = true }) => {
     });
     return () => unsubscribe();
     }, []);
+    const hanldeGptSearchClick = () => {
+      dispatch(toggleGptSearchView())
+    }
+    const handleLanguageChange = (e) => {
+      dispatch(changeLanguage(e.target.value))
+    }
   return (
     <div className='absolute w-screen px-8 py-2 bg-gradient-to-b from-black flex z-10 justify-between'>
       <img className="w-44" src={LOGO}
       alt='Logo'/>
-      {user && showProfile && (<div className="flex p-2">
-      <img className="w-12 h-12" alt="usericon" src={UICON}/>
-      <button onClick={handleSignOut} className="font-bold text-white cursor-pointer">(Sign Out)</button>
-      </div>)}
+      {user && showProfile && 
+      (<div className="flex p-2">
+        {showGptSearch && <select className="p-2 w-30 rounded-2xl bg-gray-700 text-white" onChange={handleLanguageChange}>
+          {SUPPORTED_LANG.map(language=> <option key={language.identifier} value={language.identifier}>{language.name}</option>)}
+        </select>}
+        <button className="py-2 px-4 mx-4 my-2 bg-purple-800 text-white rounded-3xl"
+        onClick={hanldeGptSearchClick}
+        > {showGptSearch ? "Homepage" : "GPT Search"}</button>
+        <img className="w-12 h-12" alt="usericon" src={UICON}/>
+        <button onClick={handleSignOut} className="font-bold text-white cursor-pointer">(Sign Out)</button>
+        </div>)}
     </div>
   )
 }
