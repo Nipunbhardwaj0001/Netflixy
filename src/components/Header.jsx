@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { addUser,removeUser } from "../utils/userSlice";
 import { LOGO, SUPPORTED_LANG, UICON } from "../utils/constants";
-import { toggleGptSearchView } from "../utils/GptSlice";
+import { toggleGptSearchView } from "../utils/gptSlice";
 import lang from "../utils/langConstants";
 import { changeLanguage } from "../utils/configSlice";
 const Header = ({ showProfile = true }) => {
@@ -41,8 +41,8 @@ const Header = ({ showProfile = true }) => {
       dispatch(changeLanguage(e.target.value))
     }
   return (
-    <div className='absolute w-screen px-8 py-2 bg-gradient-to-b from-black flex z-10 justify-between'>
-      <img className="w-44" src={LOGO}
+    <div className='absolute w-screen px-8 py-2 bg-gradient-to-b from-black flex flex-col md:flex-row z-10 justify-between'>
+      <img className="w-44 mx-auto md:mx-0" src={LOGO}
       alt='Logo'/>
       {user && showProfile && 
       (<div className="flex p-2">
