@@ -3,7 +3,7 @@ import lang from '../utils/langConstants'
 import { useDispatch, useSelector } from 'react-redux'
 import { generateMovieSuggestions } from '../utils/gemini'
 import { API_OPTIONS } from '../utils/constants'
-import { addGptMovieResult } from '../utils/GptSlice'
+import { addGptMovieResult } from '../utils/gptSlice'
 
 const GptSearchBar = () => {
     const langKey = useSelector(store => store.config.lang);
