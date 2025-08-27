@@ -1,23 +1,36 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { API_OPTIONS } from "../src/utils/constants";
 import { addTrailerVideo } from "../src/utils/movieSlice";
 import { useEffect } from "react";
 
 const useMovieTrailer = (movieId) => {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const nowPlayingMovies = useSelector(store => store.movies.nowPlayingMovies)
-        const getMovieVideo = async () => {
-            const data = await fetch("https://api.themoviedb.org/3/movie/"+ movieId +" /videos?language=en-US", API_OPTIONS)
-            const json = await data.json();
-    
-            const filterData = json.results.filter(video => video.type == "Trailer")
-            const trailer = filterData.length ? filterData[0] : json.results[0];
-            dispatch(addTrailerVideo(trailer));
-        };
-        useEffect(() => {
-            !nowPlayingMovies && getMovieVideo();
-        }, []);
-}
+  useEffect(() => {
+    if (!movieId) return;
+
+    const getMovieVideo = async () => {
+      try {
+        const res = await fetch(
+          `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
+          API_OPTIONS
+        );
+        const json = await res.json();
+
+        const trailer = json.results.find(
+          video => video.type === "Trailer" && video.site === "YouTube"
+        );
+
+        if (trailer) {
+          dispatch(addTrailerVideo(trailer));
+        }
+      } catch (error) {
+        console.error("Error fetching trailer:", error);
+      }
+    };
+
+    getMovieVideo();
+  }, [movieId]);
+};
 
 export default useMovieTrailer;
