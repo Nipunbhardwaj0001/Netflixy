@@ -23,7 +23,7 @@ const VideoTitle = ({ title, overview }) => {
       <div className="mt-8 flex space-x-4">
         <button
           onClick={handlePlayClick}
-          className="flex items-center gap-2 bg-white text-black font-semibold px-6 py-3 md:px-8 md:py-4 rounded-lg shadow-md hover:bg-gray-200 hover:scale-105 transition-transform duration-300"
+          className="flex items-center gap-2 bg-white text-black font-semibold px-6 py-3 md:px-8 md:py-4 rounded-lg shadow-md hover:bg-gray-200 hover:scale-105 transition-transform duration-300 cursor-pointer"
         >
           <svg
             className="w-6 h-6 mr-2"
