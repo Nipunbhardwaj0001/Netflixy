@@ -2,15 +2,20 @@ import { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
 import { auth } from "../utils/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { BGIMG } from "../utils/constants";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // loading state
 
   const email = useRef(null);
   const password = useRef(null);
@@ -18,39 +23,66 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    const message = checkValidData(email.current.value, password.current.value);
+    const message = checkValidData(
+      email.current.value,
+      password.current.value
+    );
     setErrorMessage(message);
     if (message) return;
 
+    setLoading(true); // start spinner
+
     if (!isSignInForm) {
-      createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+      // SIGN UP
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
         .then((userCredential) => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: name.current.value,
             photoURL: "https://example.com/jane-q-user/profile.jpg",
-          }).catch((error) => {
-            setErrorMessage(error.message);
-          });
+          })
+            .then(() => {
+              setLoading(false);
+              navigate("/browse"); // go to browse after signup
+            })
+            .catch((error) => {
+              setErrorMessage(error.message);
+              setLoading(false);
+            });
         })
         .catch((error) => {
           setErrorMessage(error.code + " - " + error.message);
+          setLoading(false);
         });
     } else {
-      signInWithEmailAndPassword(auth, email.current.value, password.current.value).catch((error) => {
-        setErrorMessage(error.code + " - " + error.message);
-      });
+      // SIGN IN
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then(() => {
+          setLoading(false);
+          navigate("/browse"); // go to browse after login
+        })
+        .catch((error) => {
+          setErrorMessage(error.code + " - " + error.message);
+          setLoading(false);
+        });
     }
   };
 
-  const toggleSignInForm = () => {
-    setIsSignInForm(!isSignInForm);
-  };
+  const toggleSignInForm = () => setIsSignInForm(!isSignInForm);
 
   return (
     <div className="relative h-screen w-screen flex flex-col">
       <Header showProfile={false} />
-      {/* Background Image */}
+
+      {/* Background */}
       <div className="absolute inset-0">
         <img src={BGIMG} alt="backImg" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/70"></div>
@@ -66,6 +98,7 @@ const Login = () => {
             {isSignInForm ? "Sign in" : "Sign Up"}
           </h1>
 
+          {/* Name field only for Sign Up */}
           {!isSignInForm && (
             <input
               ref={name}
@@ -75,6 +108,7 @@ const Login = () => {
             />
           )}
 
+          {/* Email */}
           <input
             ref={email}
             type="text"
@@ -105,10 +139,21 @@ const Login = () => {
 
           {/* Submit */}
           <button
-            className="p-4 my-4 bg-red-700 hover:bg-red-800 w-full rounded-lg font-semibold transition cursor-pointer"
+            disabled={loading}
+            className={`p-4 my-4 w-full rounded-lg font-semibold transition cursor-pointer flex items-center justify-center ${
+              loading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-red-700 hover:bg-red-800"
+            }`}
             onClick={handleButtonClick}
           >
-            {isSignInForm ? "Sign in" : "Sign Up"}
+            {loading ? (
+              <FaSpinner className="animate-spin text-white text-xl" />
+            ) : isSignInForm ? (
+              "Sign in"
+            ) : (
+              "Sign Up"
+            )}
           </button>
 
           {/* Toggle */}

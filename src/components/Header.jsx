@@ -78,7 +78,7 @@ const Header = ({ showProfile = true }) => {
             className="relative text-white font-medium group px-2 py-1"
             onClick={hanldeGptSearchClick}
           >
-            <span className="transition-colors duration-300 group-hover:text-gray-300">
+            <span className="transition-colors duration-300 group-hover:text-gray-300 cursor-pointer">
               {showGptSearch ? "Homepage" : "GPT Search"}
             </span>
             <span
@@ -91,7 +91,7 @@ const Header = ({ showProfile = true }) => {
             onClick={handleSignOut}
             className="relative text-gray-300 font-medium group px-2 py-1"
           >
-            <span className="transition-colors duration-300 group-hover:text-white">
+            <span className="transition-colors duration-300 group-hover:text-white cursor-pointer">
               Sign out
             </span>
             <span

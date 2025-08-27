@@ -12,7 +12,10 @@ const GptSearchBar = () => {
     const dispatch = useDispatch();
 
     const searchMovieTmdb = async (movie) => {
-        const data = await fetch('https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US&page=1', API_OPTIONS);
+        const data = await fetch(
+            'https://api.themoviedb.org/3/search/movie?query='+movie+'&include_adult=false&language=en-US&page=1',
+            API_OPTIONS
+        );
         const json = await data.json();
         return json.results
     };
@@ -34,7 +37,7 @@ const GptSearchBar = () => {
     return (
         <div className="pt-[10%] flex justify-center px-4">
             <form
-              className="grid grid-cols-12 w-full max-w-2xl bg-black/70 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border-2 border-black"
+              className="grid grid-cols-12 w-full max-w-2xl bg-black/70 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden border-2 border-black transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(239,68,68,0.8)]"
               onSubmit={(e) => e.preventDefault()}
             >
                 <input
@@ -45,7 +48,7 @@ const GptSearchBar = () => {
                 />
                 <button
                     type="submit"
-                    className="col-span-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-r-2xl transition"
+                    className="col-span-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-r-2xl transition-all duration-300 cursor-pointer hover:shadow-[0_0_12px_rgba(239,68,68,0.8)]"
                     onClick={handleGptSearchClick}
                 >
                     {lang[langKey].search}
