@@ -9,7 +9,7 @@ const GptSearch = () => {
         {/* Heading + Tagline */}
         <div className="px-4 pt-20 md:pt-32 flex flex-col items-center text-center">
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 sm:mb-6 text-white">
-            Discover Your Next Favorite Watch
+            Look Out For Your Next Favorite Watch
           </h1>
           <p className="text-gray-300 max-w-2xl mb-6 sm:mb-8 text-xs sm:text-sm md:text-base">
             Get AI-powered recommendations for movies based on your preferences
